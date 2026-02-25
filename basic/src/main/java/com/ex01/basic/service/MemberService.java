@@ -85,16 +85,16 @@ public class MemberService {
         memRepository.save( memberEntity );
     }
     public void delMember(int id , String username ){
-        //if( !memRepository.existsById(id) )
-        //    throw new MemberNotFoundException("삭제 사용자 없음");
         MemberEntity memberEntity = memRepository.findById(id)
                 .orElseThrow( ()-> new MemberNotFoundException("삭제 사용자 없음") );
-
         if( !memberEntity.getUsername().equals( username ) )
             throw new MemberAccessDeniedException("삭제 권한이 없습니다");
-
         memberEntity.getPosts().clear();
 
+        memberEntity.getPostCounts().forEach(
+                postCount -> postCount.setMemberEntity(null)
+        );
+        memberEntity.getPostLikes().clear();
         memRepository.deleteById( id );
     }
     public void insert(MemberRegDto memberRegDto, MultipartFile multipartFile){

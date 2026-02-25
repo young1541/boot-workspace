@@ -13,7 +13,17 @@ public class PostAllDto {
     private String content;
     private LocalDateTime createdAt;
     private LocalDateTime updateTime;
-    public PostAllDto(PostEntity postEntity){
+
+    private String username;
+    private long count;
+    private boolean liked;
+    private long likedCount;
+
+    public PostAllDto(PostEntity postEntity, Long count, boolean liked, long likedCount ){
         BeanUtils.copyProperties(postEntity, this );
+        this.username = postEntity.getMemberEntity().getUsername();
+        this.count = count;
+        this.liked = liked;
+        this.likedCount = likedCount;
     }
 }
